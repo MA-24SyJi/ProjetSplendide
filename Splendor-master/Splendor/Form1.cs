@@ -19,7 +19,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+ 
 namespace Splendor
 {
     /// <summary>
@@ -27,12 +27,22 @@ namespace Splendor
     /// </summary>
     public partial class frmSplendor : Form
     {
+        //Creat object 
+        coin Gold = new coin();
+        coin Diamand = new coin();
+        coin Emeraude = new coin();
+        coin Onyx = new coin();
+        coin Rubis = new coin();
+        coin Saphir = new coin();
         //used to store the number of coins selected for the current round of game
         private int nbRubis;
         private int nbOnyx;
         private int nbEmeraude;
         private int nbDiamand;
         private int nbSaphir;
+        // Set coin label with default value
+    
+
 
         //id of the player that is playing
         private int currentPlayerId;
@@ -56,13 +66,20 @@ namespace Splendor
         /// <param name="e"></param>
         private void frmSplendor_Load(object sender, EventArgs e)
         {
-            lblGoldCoin.Text = "5";
-
-            lblDiamandCoin.Text = "7";
-            lblEmeraudeCoin.Text = "7" ;
-            lblOnyxCoin.Text = "7";
-            lblRubisCoin.Text = "7";
-            lblSaphirCoin.Text = "7";
+            //set object            
+            Gold.Number = 5;
+            Diamand.Number = 7;
+            Emeraude.Number = 7;
+            Onyx.Number = 7;
+            Rubis.Number = 7;
+            Saphir.Number = 7;
+            // Diplay on lblGoldCoin           
+            lblGoldCoin.Text = Gold.Number.ToString(); 
+            lblDiamandCoin.Text = Diamand.Number.ToString();
+            lblEmeraudeCoin.Text = Emeraude.Number.ToString();
+            lblOnyxCoin.Text = Onyx.Number.ToString();
+            lblRubisCoin.Text = Rubis.Number.ToString();
+            lblSaphirCoin.Text = Saphir.Number.ToString();
 
             conn = new ConnectionDB();
 
@@ -150,7 +167,6 @@ namespace Splendor
             lblChoiceRubis.Text = "";
             lblChoiceSaphir.Text = "";
             lblChoiceEmeraude.Text = "";
-
             lblChoiceCard.Text = "";
 
             //no coins selected
@@ -167,10 +183,10 @@ namespace Splendor
             player.Coins = new int[] { 0, 1, 0, 1, 1 };
 
             lblPlayerDiamandCoin.Text = player.Coins[0].ToString();
-            lblPlayerOnyxCoin.Text = player.Coins[1].ToString();
-            lblPlayerRubisCoin.Text = player.Coins[2].ToString();
-            lblPlayerSaphirCoin.Text = player.Coins[3].ToString();
-            lblPlayerEmeraudeCoin.Text = player.Coins[4].ToString();
+            lblPlayerOnyxCoin.Text = player.Coins[0].ToString();
+            lblPlayerRubisCoin.Text = player.Coins[0].ToString();
+            lblPlayerSaphirCoin.Text = player.Coins[0].ToString();
+            lblPlayerEmeraudeCoin.Text = player.Coins[0].ToString();
             currentPlayerId = id;
 
             lblPlayer.Text = "Jeu de " + name;
@@ -191,6 +207,7 @@ namespace Splendor
                 lblChoiceRubis.Visible = true;
                 //TO DO check if possible to choose a coin, update the number of available coin
                 nbRubis++;
+                
                 lblChoiceRubis.Text = nbRubis + "\r\n";
             }
         }
