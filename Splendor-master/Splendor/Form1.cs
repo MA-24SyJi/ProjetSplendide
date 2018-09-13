@@ -73,7 +73,7 @@ namespace Splendor
             Onyx.Number = 7;
             Rubis.Number = 7;
             Saphir.Number = 7;
-            // Diplay on lblGoldCoin           
+            // Diplay on l           
             lblGoldCoin.Text = Gold.Number.ToString(); 
             lblDiamandCoin.Text = Diamand.Number.ToString();
             lblEmeraudeCoin.Text = Emeraude.Number.ToString();
@@ -205,9 +205,10 @@ namespace Splendor
             {
                 cmdValidateChoice.Visible = true;
                 lblChoiceRubis.Visible = true;
-                //TO DO check if possible to choose a coin, update the number of available coin
+                //TO DO check if possible to choose a coin, update the number of available 
                 nbRubis++;
-                
+                Rubis.Number--;
+                lblRubisCoin.Text = Rubis.Number.ToString();
                 lblChoiceRubis.Text = nbRubis + "\r\n";
             }
         }
@@ -219,7 +220,13 @@ namespace Splendor
         /// <param name="e"></param>
         private void lblSaphirCoin_Click(object sender, EventArgs e)
         {
-            
+            cmdValidateChoice.Visible = true;
+            lblChoiceSaphir.Visible = true;
+            //TO DO check if possible to choose a coin, update the number of available 
+            nbSaphir++;
+            Saphir.Number--;
+            lblSaphirCoin.Text = Saphir.Number.ToString();
+            lblChoiceSaphir.Text = nbSaphir + "\r\n";
         }
 
         /// <summary>
@@ -229,7 +236,13 @@ namespace Splendor
         /// <param name="e"></param>
         private void lblOnyxCoin_Click(object sender, EventArgs e)
         {
-            
+            cmdValidateChoice.Visible = true;
+            lblChoiceOnyx.Visible = true;
+            //TO DO check if possible to choose a coin, update the number of available 
+            nbOnyx++;
+            Onyx.Number--;
+            lblOnyxCoin.Text = Onyx.Number.ToString();
+            lblChoiceOnyx.Text = nbOnyx + "\r\n";
         }
 
         /// <summary>
@@ -239,8 +252,14 @@ namespace Splendor
         /// <param name="e"></param>
         private void lblEmeraudeCoin_Click(object sender, EventArgs e)
         {
+            cmdValidateChoice.Visible = true;
+            lblChoiceEmeraude.Visible = true;
+            //TO DO check if possible to choose a coin, update the number of available 
+            nbEmeraude++;
+            Emeraude.Number--;
+            lblEmeraudeCoin.Text = Emeraude.Number.ToString();
+            lblChoiceEmeraude.Text = nbEmeraude + "\r\n";
 
-            
         }
 
         /// <summary>
