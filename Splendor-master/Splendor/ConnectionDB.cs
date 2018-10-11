@@ -36,6 +36,9 @@ namespace Splendor
             //Create and insert ressources
             //TO DO
             CreateInsertRessources();
+
+            //Create and insert NbCoin
+            CreateInsertNbCoin()
         }
 
 
@@ -68,7 +71,7 @@ namespace Splendor
                 card.Ress = (Ressources)ressource;
                 card.PrestigePt = nbPtPrestige;
                 card.Level = level;
-                listCard.Push(card);                
+                listCard.Push(card);  
             }
 
             //select the cost of the card : look at the cost table (and other)
@@ -76,18 +79,26 @@ namespace Splendor
             string sql2 = "select fkCard, fkRessource from cost";
             SQLiteCommand command2 = new SQLiteCommand(sql, m_dbConnection);
             SQLiteDataReader reader2 = command.ExecuteReader();
-            int ressource2 = 0;
-            int idcard = 0;
+            int[] ressource2;
+            //int idcard = 0; Pas sur d'en avoir besoin (a revoir)
             
             while (reader.Read())
             {
-                ressource2 = (int)reader["fkRessource"];
-            //get the nbRessource of the cost
+                //get the nbRessource of the cost
+                ressource2 = (int[])reader["fkRessource"];
+                //idcard = (int)reader["fkCard"]; Pas sur d'en avoir besoin (a revoir)
+                card.Cout = ressource2;
+                //push card into the stack
+                listCard.Push(card);
             }
-            //push card into the stack
-
-            //}
             return listCard;
+        }
+
+        private void CreateInsertNbCoin()
+        {
+            string sql = "Create table NbCoin (IdNbCoin int primary key, fkPlayer int, fkRessource int, nbCoin int, Foreign key(fkPlayer) references player(id), foreign key(fkRessource) references Ressource(idRessource))";
+            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+            command.ExecuteNonQuery();
         }
 
 
