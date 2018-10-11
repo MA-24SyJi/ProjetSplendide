@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
+using Splendor.Properties;
 
 namespace Splendor
 {
@@ -48,19 +49,41 @@ namespace Splendor
             //TO DO
             //Create an object "Stack of Card"
             Stack<Card> listCard = new Stack<Card>();
-            //do while to go to every record of the card table
-            //while (....)
-            //{
-            //Get the ressourceid and the number of prestige points
+
             //Create a card object
+            Card card = new Card();
+
+            //do while to go to every record of the card table
+            string sql = "select fkRessource, nbPtPrestige from card where level = " + level;
+            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+            SQLiteDataReader reader = command.ExecuteReader();
+            int ressource = 0;
+            int nbPtPrestige = 0;
+
+            while (reader.Read())
+            {
+                //Get the ressourceid and the number of prestige points
+                ressource = (int)reader["fkRessource"];
+                nbPtPrestige = (int)reader["nbPtPrestige"];
+                card.Ress = (Ressources)ressource;
+                card.PrestigePt = nbPtPrestige;
+                card.Level = level;
+                listCard.Push(card);                
+            }
 
             //select the cost of the card : look at the cost table (and other)
-
             //do while to go to every record of the card table
-            //while (....)
-            //{
+            string sql2 = "select fkCard, fkRessource from cost";
+            SQLiteCommand command2 = new SQLiteCommand(sql, m_dbConnection);
+            SQLiteDataReader reader2 = command.ExecuteReader();
+            int ressource2 = 0;
+            int idcard = 0;
+            
+            while (reader.Read())
+            {
+                ressource2 = (int)reader["fkRessource"];
             //get the nbRessource of the cost
-            //}
+            }
             //push card into the stack
 
             //}
@@ -120,23 +143,23 @@ namespace Splendor
             command.ExecuteNonQuery();
 
             //Insert Ressources of the game
-            sql = "insert into Ressource (idRessource) values (1)";
+            sql = "insert into Ressource (idRessource) values (1)"; //Rubis
             command = new SQLiteCommand(sql, m_dbConnection);
             command.ExecuteNonQuery();
 
-            sql = "insert into Ressource (idRessource) values (2)";
+            sql = "insert into Ressource (idRessource) values (2)"; //Emeraude
             command = new SQLiteCommand(sql, m_dbConnection);
             command.ExecuteNonQuery();
 
-            sql = "insert into Ressource (idRessource) values (3)";
+            sql = "insert into Ressource (idRessource) values (3)"; //Onyx
             command = new SQLiteCommand(sql, m_dbConnection);
             command.ExecuteNonQuery();
 
-            sql = "insert into Ressource (idRessource) values (4)";
+            sql = "insert into Ressource (idRessource) values (4)"; //Saphir
             command = new SQLiteCommand(sql, m_dbConnection);
             command.ExecuteNonQuery();
 
-            sql = "insert into Ressource (idRessource) values (5)";
+            sql = "insert into Ressource (idRessource) values (5)"; //Diamant
             command = new SQLiteCommand(sql, m_dbConnection);
             command.ExecuteNonQuery();
         }
@@ -154,7 +177,7 @@ namespace Splendor
         private void CreateInsertCards()
         {
             //Insert cards without the necessary resources to buy them
-            InsertInto("CREATE TABLE cards (idcard INT PRIMARY KEY, fkRessource Int, level Int, nbPtPrestige Int, fkPlayer Int)");
+            InsertInto("CREATE TABLE card (idcard INT PRIMARY KEY, fkRessource Int, level Int, nbPtPrestige Int, fkPlayer Int)");
 
             InsertInto("insert into card(idcard, fkRessource, level, nbPtPrestige) values (2, 0,4,3)");
             InsertInto("insert into card(idcard, fkRessource, level, nbPtPrestige) values (3, 0,4,3)");
