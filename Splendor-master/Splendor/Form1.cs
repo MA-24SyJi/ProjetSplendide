@@ -27,6 +27,13 @@ namespace Splendor
     /// </summary>
     public partial class frmSplendor : Form
     {
+
+        private List<List<TextBox>> gridCard = new List<List<TextBox>>();
+
+        private List<List<Card>> GridStockCard = new List<List<Card>>();
+
+        private Random rand = new Random();
+
         //used to store the number of coins selected for the current round of game
         private int nbRubis;
         private int nbOnyx;
@@ -64,32 +71,47 @@ namespace Splendor
             lblRubisCoin.Text = "7";
             lblSaphirCoin.Text = "7";
 
+            //Initialize a connection with sqlite database
             conn = new ConnectionDB();
 
             //load cards from the database
             //they are not hard coded any more
             //TO DO
 
-            Card card11 = new Card();
-            card11.Level = 1;
-            card11.PrestigePt = 1;
-            card11.Cout = new int[] { 1, 0, 2, 0, 2 };
-            card11.Ress = Ressources.Rubis;
+            gridCard.Add(new List<TextBox>() { txtLevel11, txtLevel12, txtLevel13, txtLevel14 });
+            gridCard.Add(new List<TextBox>() { txtLevel21, txtLevel22, txtLevel23, txtLevel24 });
+            gridCard.Add(new List<TextBox>() { txtLevel31, txtLevel32, txtLevel33, txtLevel34 });
+            gridCard.Add(new List<TextBox>() { txtNoble1, txtNoble2, txtNoble3, txtNoble4 });
 
-            Card card12 = new Card();
-            card12.Level = 1;
-            card12.PrestigePt = 0;
-            card12.Cout = new int[] { 0, 1, 2, 1, 0 };
-            card12.Ress = Ressources.Saphir;
+            foreach (List<TextBox> txtBoxes in gridCard)
+            {
+                foreach (TextBox txtBox in txtBoxes)
+                {
+                    txtBox.ReadOnly = true;
+                }
+            }
 
-            txtLevel11.Text = card11.ToString();
-            txtLevel12.Text = card12.ToString();
 
             //load cards from the database
-            Stack<Card> listCardOne = conn.GetListCardAccordingToLevel(1);
+            List<Card> listCardOne = conn.GetListCardAccordingToLevel(1);
+            List<Card> listCardTwo = conn.GetListCardAccordingToLevel(2);
+            List<Card> listCardThree = conn.GetListCardAccordingToLevel(3);
+            List<Card> listCardNoble = conn.GetListCardAccordingToLevel(4);
+
+            GridStockCard = new List<List<Card>>() { listCardOne, listCardTwo, listCardThree, listCardNoble};
+
+            for (int a = 0; a < gridCard.Count; a++)
+            {
+                for (int b = 0; b < gridCard[a].Count; b++)
+                {
+                    var RandomValue = rand.Next((GridStockCard[a].Count()) - 1);
+                    gridCard[a][b].Text = GridStockCard[a].ElementAt(RandomValue).ToString();
+                    GridStockCard[a].RemoveAt(RandomValue);
+                }
+            }
             //Go through the results
             //Don't forget to check when you are at the end of the stack
-            
+
             //fin TO DO
 
             this.Width = 680;
