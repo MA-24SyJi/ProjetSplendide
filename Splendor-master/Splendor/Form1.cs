@@ -27,12 +27,31 @@ namespace Splendor
     /// </summary>
     public partial class frmSplendor : Form
     {
+
+        private List<List<TextBox>> gridCard = new List<List<TextBox>>();
+
+        private List<List<Card>> GridStockCard = new List<List<Card>>();
+
+        private Random rand = new Random();
+
+        //Creat object 
+        coin Gold = new coin();
+        coin Diamand = new coin();
+        coin Emeraude = new coin();
+        coin Onyx = new coin();
+        coin Rubis = new coin();
+        coin Saphir = new coin();
         //used to store the number of coins selected for the current round of game
         private int nbRubis;
         private int nbOnyx;
         private int nbEmeraude;
         private int nbDiamand;
         private int nbSaphir;
+
+        private int nbTotal;
+        // Set coin label with default value
+
+
 
         //id of the player that is playing
         private int currentPlayerId;
@@ -56,42 +75,62 @@ namespace Splendor
         /// <param name="e"></param>
         private void frmSplendor_Load(object sender, EventArgs e)
         {
-            lblGoldCoin.Text = "5";
-
-            lblDiamandCoin.Text = "7";
-            lblEmeraudeCoin.Text = "7" ;
-            lblOnyxCoin.Text = "7";
-            lblRubisCoin.Text = "7";
-            lblSaphirCoin.Text = "7";
-
+            //set object            
+            Gold.Number = 5;
+            Diamand.Number = 7;
+            Emeraude.Number = 7;
+            Onyx.Number = 7;
+            Rubis.Number = 7;
+            Saphir.Number = 7;
+            // Diplay on l           
+            lblGoldCoin.Text = Gold.Number.ToString();
+            lblDiamandCoin.Text = Diamand.Number.ToString();
+            lblEmeraudeCoin.Text = Emeraude.Number.ToString();
+            lblOnyxCoin.Text = Onyx.Number.ToString();
+            lblRubisCoin.Text = Rubis.Number.ToString();
+            lblSaphirCoin.Text = Saphir.Number.ToString();
+            //Initialize a connection with sqlite database
             conn = new ConnectionDB();
 
             //load cards from the database
             //they are not hard coded any more
             //TO DO
 
-            Card card11 = new Card();
-            card11.Level = 1;
-            card11.PrestigePt = 1;
-            card11.Cout = new int[] { 1, 0, 2, 0, 2 };
-            card11.Ress = Ressources.Rubis;
+            gridCard.Add(new List<TextBox>() { txtLevel11, txtLevel12, txtLevel13, txtLevel14 });
+            gridCard.Add(new List<TextBox>() { txtLevel21, txtLevel22, txtLevel23, txtLevel24 });
+            gridCard.Add(new List<TextBox>() { txtLevel31, txtLevel32, txtLevel33, txtLevel34 });
+            gridCard.Add(new List<TextBox>() { txtNoble1, txtNoble2, txtNoble3, txtNoble4 });
 
-            Card card12 = new Card();
-            card12.Level = 1;
-            card12.PrestigePt = 0;
-            card12.Cout = new int[] { 0, 1, 2, 1, 0 };
-            card12.Ress = Ressources.Saphir;
+            foreach (List<TextBox> txtBoxes in gridCard)
+            {
+                foreach (TextBox txtBox in txtBoxes)
+                {
+                    txtBox.ReadOnly = true;
+                }
+            }
 
-            txtLevel11.Text = card11.ToString();
-            txtLevel12.Text = card12.ToString();
 
             //load cards from the database
-            Stack<Card> listCardOne = conn.GetListCardAccordingToLevel(1);
+            List<Card> listCardOne = conn.GetListCardAccordingToLevel(1);
+            List<Card> listCardTwo = conn.GetListCardAccordingToLevel(2);
+            List<Card> listCardThree = conn.GetListCardAccordingToLevel(3);
+            List<Card> listCardNoble = conn.GetListCardAccordingToLevel(4);
+
+            GridStockCard = new List<List<Card>>() { listCardOne, listCardTwo, listCardThree, listCardNoble };
+
+            for (int a = 0; a < gridCard.Count; a++)
+            {
+                for (int b = 0; b < gridCard[a].Count; b++)
+                {
+                    var RandomValue = rand.Next((GridStockCard[a].Count()) - 1);
+                    gridCard[a][b].Text = GridStockCard[a].ElementAt(RandomValue).ToString();
+                    GridStockCard[a].RemoveAt(RandomValue);
+                }
+            }
             //Go through the results
             //Don't forget to check when you are at the end of the stack
-            
-            //fin TO DO
 
+            //fin TO DO
             this.Width = 680;
             this.Height = 540;
 
@@ -108,10 +147,27 @@ namespace Splendor
             //we wire the click on all cards to the same event
             //TO DO for all cards
             txtLevel11.Click += ClickOnCard;
+            txtLevel12.Click += ClickOnCard;
+
         }
 
         private void ClickOnCard(object sender, EventArgs e)
         {
+            if (enableClicLabel)
+            {
+
+
+
+
+                TextBox txtBox = sender as TextBox;
+                String[] TableauDeLignes = txtBox.Lines;
+                
+
+
+                //get the text displayed in the textbox that has been clicked
+                MessageBox.Show(TableauDeLignes[2]);
+
+            }
             //We get the value on the card and we split it to get all the values we need (number of prestige points and ressource)
             //Enable the button "Validate"
             //TO DO
@@ -128,7 +184,7 @@ namespace Splendor
             this.Height = 780;
 
             int id = 0;
-           
+
             LoadPlayer(id);
 
         }
@@ -138,8 +194,9 @@ namespace Splendor
         /// load data about the current player
         /// </summary>
         /// <param name="id">identifier of the player</param>
-        private void LoadPlayer(int id) { 
-
+        private void LoadPlayer(int id)
+        {
+            currentPlayerId = id;
             enableClicLabel = true;
 
             string name = conn.GetPlayerName(currentPlayerId);
@@ -150,7 +207,6 @@ namespace Splendor
             lblChoiceRubis.Text = "";
             lblChoiceSaphir.Text = "";
             lblChoiceEmeraude.Text = "";
-
             lblChoiceCard.Text = "";
 
             //no coins selected
@@ -167,16 +223,64 @@ namespace Splendor
             player.Coins = new int[] { 0, 1, 0, 1, 1 };
 
             lblPlayerDiamandCoin.Text = player.Coins[0].ToString();
-            lblPlayerOnyxCoin.Text = player.Coins[1].ToString();
-            lblPlayerRubisCoin.Text = player.Coins[2].ToString();
-            lblPlayerSaphirCoin.Text = player.Coins[3].ToString();
-            lblPlayerEmeraudeCoin.Text = player.Coins[4].ToString();
+            lblPlayerOnyxCoin.Text = player.Coins[0].ToString();
+            lblPlayerRubisCoin.Text = player.Coins[0].ToString();
+            lblPlayerSaphirCoin.Text = player.Coins[0].ToString();
+            lblPlayerEmeraudeCoin.Text = player.Coins[0].ToString();
             currentPlayerId = id;
 
             lblPlayer.Text = "Jeu de " + name;
 
             cmdPlay.Enabled = false;
         }
+
+        /// <summary>
+        /// Coin selection control
+        /// </summary>
+        /// <param name="nbCoin"></param>
+        /// <param name="lblCoin"></param>
+        /// <param name="lblChoiceCoin"></param>
+        private void CoinChecker(ref int nbCoin, ref Label lblCoin, ref Label lblChoiceCoin)
+        {
+            lblChoiceCoin.Visible = true;
+            int var = Convert.ToInt32(lblCoin.Text);
+            if (var != 0)
+            {
+                if (var == 2 && nbCoin == 1)
+                {
+                    MessageBox.Show("Vous pouvez prendre 2 jetons de la même couleur uniquement à condition qu'il en reste au moin 4 dans la pile");
+                }
+
+                if (nbRubis == 2 || nbSaphir == 2 || nbOnyx == 2 || nbEmeraude == 2 || nbDiamand == 2)
+                {
+                    MessageBox.Show("Vous ne pouvez pas prendre ce jeton car vous avez déja pris 2 mêmes pierres précieuse");
+                }
+                else
+                {
+                    if ((nbCoin == 1 && nbRubis == 1) || (nbCoin == 1 && nbSaphir == 1 ) || (nbCoin == 1 && nbOnyx == 1) || (nbCoin == 1 && nbEmeraude == 1) || (nbCoin == 1 && nbDiamand == 1))
+                    {
+                        MessageBox.Show("Vous ne pouvez pas prendre 2 même jetons ainsi qu'un jeton différent");
+                    }
+                    else
+                    {
+                        nbTotal = nbRubis + nbSaphir + nbOnyx + nbEmeraude + nbDiamand;
+                        if (nbTotal >= 3)
+                        {
+                            MessageBox.Show("Vous avez pris le nombre de jetons maximum");
+                        }
+                        else
+                        {
+                            nbCoin++;
+                            var--;
+                            lblCoin.Text = var.ToString();
+                            lblChoiceCoin.Text = nbCoin + "\r\n";
+                        }
+                    }
+                }
+            }
+
+        }
+
 
         /// <summary>
         /// click on the red coin (rubis) to tell the player has selected this coin
@@ -187,11 +291,8 @@ namespace Splendor
         {
             if (enableClicLabel)
             {
-                cmdValidateChoice.Visible = true;
-                lblChoiceRubis.Visible = true;
-                //TO DO check if possible to choose a coin, update the number of available coin
-                nbRubis++;
-                lblChoiceRubis.Text = nbRubis + "\r\n";
+                CoinChecker(ref nbRubis, ref lblRubisCoin, ref lblChoiceRubis);
+                cmdValidateChoice.Visible = true;               
             }
         }
 
@@ -202,7 +303,11 @@ namespace Splendor
         /// <param name="e"></param>
         private void lblSaphirCoin_Click(object sender, EventArgs e)
         {
-            
+            if (enableClicLabel)
+            {
+                CoinChecker(ref nbSaphir, ref lblSaphirCoin, ref lblChoiceSaphir);
+                cmdValidateChoice.Visible = true;             
+            }
         }
 
         /// <summary>
@@ -212,7 +317,12 @@ namespace Splendor
         /// <param name="e"></param>
         private void lblOnyxCoin_Click(object sender, EventArgs e)
         {
-            
+
+            if (enableClicLabel)
+            {
+                CoinChecker(ref nbOnyx, ref lblOnyxCoin, ref lblChoiceOnyx);
+                cmdValidateChoice.Visible = true;
+            }
         }
 
         /// <summary>
@@ -223,7 +333,11 @@ namespace Splendor
         private void lblEmeraudeCoin_Click(object sender, EventArgs e)
         {
 
-            
+            if (enableClicLabel)
+            {
+                CoinChecker(ref nbEmeraude, ref lblEmeraudeCoin, ref lblChoiceEmeraude);
+                cmdValidateChoice.Visible = true;
+            }
         }
 
         /// <summary>
@@ -233,7 +347,12 @@ namespace Splendor
         /// <param name="e"></param>
         private void lblDiamandCoin_Click(object sender, EventArgs e)
         {
-            
+
+            if (enableClicLabel)
+            {
+                CoinChecker(ref nbDiamand, ref lblDiamandCoin, ref lblChoiceDiamand);
+                cmdValidateChoice.Visible = true;
+            }
         }
 
         /// <summary>
@@ -245,7 +364,7 @@ namespace Splendor
         {
             cmdNextPlayer.Visible = true;
             //TO DO Check if card or coins are selected, impossible to do both at the same time
-            
+
             cmdNextPlayer.Enabled = true;
         }
 
@@ -256,7 +375,9 @@ namespace Splendor
         /// <param name="e"></param>
         private void cmdInsertPlayer_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("A implémenter");
+            AddNewUser f2 = new AddNewUser();
+            f2.ShowDialog();
+
         }
 
         /// <summary>
@@ -270,8 +391,36 @@ namespace Splendor
             //TO DO Get the id of the player : in release 0.1 there are only 3 players
             //Reload the data of the player
             //We are not allowed to click on the next button
-            
+
         }
 
+        private void txtLevel12_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+
+        /*
+         * Selection card : 
+         */
+
+        private void txtLevel12_DoubleClick(object sender, EventArgs e)
+        {
+            txtPlayerBookedCard.Text = txtLevel12.Text;
+        }
+
+        private void txtLevel11_DoubleClick(object sender, EventArgs e)
+        {
+            txtPlayerBookedCard.Text = txtLevel11.Text;
+        }
+
+        private void txtLevel14_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        /*
+         * fin Selection card : 
+         */
     }
 }
