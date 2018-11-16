@@ -1,0 +1,4 @@
+var searchData=
+[
+  ['dispose',['Dispose',['../class_splendor_1_1_add_new_user.html#a6d9f445ab89353f97cf27df73437b710',1,'Splendor.AddNewUser.Dispose()'],['../class_splendor_1_1frm_splendor.html#a749f4f1d67c78e74aa1a55aa6fdd754b',1,'Splendor.frmSplendor.Dispose()']]]
+];
