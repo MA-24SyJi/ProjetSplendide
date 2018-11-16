@@ -89,6 +89,9 @@ namespace Splendor
             return listCard;
         }
 
+        /// <summary>
+        /// Create the "NbCoin" table and insert data
+        /// </summary>
         private void CreateInsertNbCoin()
         {
             string sql = "Create table NbCoin (IdNbCoin int primary key, fkPlayer int, fkRessource int, nbCoin int, Foreign key(fkPlayer) references player(id), foreign key(fkRessource) references Ressource(idRessource))";
@@ -287,6 +290,9 @@ namespace Splendor
             InsertInto("insert into Card(idCard, fkRessource, level, nbPtPrestige) values (101, 0,1,1)");
         }
 
+        /// <summary>
+        /// Insert data in the cost table
+        /// </summary>
         private void CreateInsertCost()
         {
             //Insert cost of the Cards
