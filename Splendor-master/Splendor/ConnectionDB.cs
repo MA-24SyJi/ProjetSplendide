@@ -43,12 +43,12 @@ namespace Splendor
         /// get the list of Cards according to the level
         /// </summary>
         /// <returns>Cards stack</returns>
-        public List<Card> GetListCardAccordingToLevel(int level)
+        public Stack<Card> GetListCardAccordingToLevel(int level)
         {
             //Get all the data from Card table selecting them according to the data
             //TO DO
             //Create an object "Stack of Card"
-            List<Card> listCard = new List<Card>();
+            Stack<Card> listCard = new Stack<Card>();
 
             //Create a Card object
             Card Card = new Card();
@@ -68,7 +68,7 @@ namespace Splendor
                 Card.Ress = (Ressources)ressource;
                 Card.PrestigePt = nbPtPrestige;
                 Card.Level = level;
-                listCard.Add(Card);
+                listCard.Push(Card);
             }
 
             //select the cost of the Card : look at the cost table (and other)
@@ -84,7 +84,7 @@ namespace Splendor
                 ressource2 = (int[])reader["fkRessource"];
                 Card.Cout = ressource2;
                 //Add Card into the stack
-                listCard.Add(Card);
+                listCard.Push(Card);
             }
             return listCard;
         }
@@ -183,7 +183,7 @@ namespace Splendor
         private void CreateInsertCards()
         {
             //Insert Cards without the necessary resources to buy them
-            InsertInto("CREATE TABLE Card (idCard INT PRIMARY KEY, fkRessource Int, level Int, nbPtPrestige Int, fkPlayer Int, foreign key(fkRessource) references Ressource(idRessource), foreign key(fkPlayer) references player(id))");
+            InsertInto("CREATE TABLE Card (idCard INT PRIMARY KEY, fkRessource Int, level Int, nbPtPrestige Int, fkPlayer Int,  foreign key(fkRessource) references Ressource(idRessource), foreign key(fkPlayer) references player(id))");
 
             InsertInto("insert into Card(idCard, fkRessource, level, nbPtPrestige) values (2, 0,4,3)");
             InsertInto("insert into Card(idCard, fkRessource, level, nbPtPrestige) values (3, 0,4,3)");
@@ -292,6 +292,7 @@ namespace Splendor
             //Insert cost of the Cards
             InsertInto("Create table Cost (idCost integer primary key autoincrement, fkCard int, fkRessource int, nbRessource int, foreign key(fkCard) references Card(idCard), foreign key(fkRessource) references Ressource(idRessource))");
 
+            //Rubis
 
             InsertInto( "insert into cost(fkCard, fkRessource, nbRessource) values (3, 1,4)"); 
             InsertInto( "insert into cost(fkCard, fkRessource, nbRessource) values (6, 1,4)"); 
@@ -444,7 +445,7 @@ namespace Splendor
             InsertInto( "insert into cost(fkCard, fkRessource, nbRessource) values (97, 3,1)");
             InsertInto( "insert into cost(fkCard, fkRessource, nbRessource) values (100, 3,2)");
 
-            // Saphire
+            // Saphir
 
             InsertInto( "insert into cost(fkCard, fkRessource, nbRessource) values (2, 4,4)"); 
             InsertInto( "insert into cost(fkCard, fkRessource, nbRessource) values (4, 4,3)"); 

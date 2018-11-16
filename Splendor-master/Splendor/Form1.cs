@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -95,12 +96,11 @@ namespace Splendor
             //load cards from the database
             //they are not hard coded any more
             //TO DO
-
+            /*
             gridCard.Add(new List<TextBox>() { txtLevel11, txtLevel12, txtLevel13, txtLevel14 });
             gridCard.Add(new List<TextBox>() { txtLevel21, txtLevel22, txtLevel23, txtLevel24 });
             gridCard.Add(new List<TextBox>() { txtLevel31, txtLevel32, txtLevel33, txtLevel34 });
             gridCard.Add(new List<TextBox>() { txtNoble1, txtNoble2, txtNoble3, txtNoble4 });
-
             foreach (List<TextBox> txtBoxes in gridCard)
             {
                 foreach (TextBox txtBox in txtBoxes)
@@ -108,14 +108,40 @@ namespace Splendor
                     txtBox.ReadOnly = true;
                 }
             }
-
+            */
 
             //load cards from the database
-            List<Card> listCardOne = conn.GetListCardAccordingToLevel(1);
-            List<Card> listCardTwo = conn.GetListCardAccordingToLevel(2);
-            List<Card> listCardThree = conn.GetListCardAccordingToLevel(3);
-            List<Card> listCardNoble = conn.GetListCardAccordingToLevel(4);
+            Stack<Card> listCardOne = conn.GetListCardAccordingToLevel(1);
+            Stack<Card> listCardTwo = conn.GetListCardAccordingToLevel(2);
+            Stack<Card> listCardThree = conn.GetListCardAccordingToLevel(3);
+            Stack<Card> listCardNoble = conn.GetListCardAccordingToLevel(4);
+            
+            //Card level 1
+            txtLevel11.Text = listCardOne.Pop().ToString();
+            txtLevel12.Text = listCardOne.Pop().ToString();
+            txtLevel13.Text = listCardOne.Pop().ToString();
+            txtLevel14.Text = listCardOne.Pop().ToString();
 
+            //Card level 2
+            txtLevel21.Text = listCardOne.Pop().ToString();
+            txtLevel22.Text = listCardOne.Pop().ToString();
+            txtLevel23.Text = listCardOne.Pop().ToString();
+            txtLevel24.Text = listCardOne.Pop().ToString();
+
+            //Card level 3
+            txtLevel31.Text = listCardOne.Pop().ToString();
+            txtLevel32.Text = listCardOne.Pop().ToString();
+            txtLevel33.Text = listCardOne.Pop().ToString();
+            txtLevel34.Text = listCardOne.Pop().ToString();
+
+            //Card noble
+            txtNoble1.Text = listCardOne.Pop().ToString();
+            txtNoble2.Text = listCardOne.Pop().ToString();
+            txtNoble3.Text = listCardOne.Pop().ToString();
+            txtNoble4.Text = listCardOne.Pop().ToString();
+
+
+            /*
             GridStockCard = new List<List<Card>>() { listCardOne, listCardTwo, listCardThree, listCardNoble };
 
             for (int a = 0; a < gridCard.Count; a++)
@@ -127,6 +153,8 @@ namespace Splendor
                     GridStockCard[a].RemoveAt(RandomValue);
                 }
             }
+            */
+
             //Go through the results
             //Don't forget to check when you are at the end of the stack
 
