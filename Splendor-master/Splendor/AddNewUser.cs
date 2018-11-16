@@ -20,7 +20,7 @@ namespace Splendor
         private void cmdNewUser_Click(object sender, EventArgs e)
         {
             ConnectionDB db = new ConnectionDB();
-           
+            
             Player player1 = new Player();
 
 
